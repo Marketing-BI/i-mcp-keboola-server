@@ -12,13 +12,13 @@ ENV UV_LINK_MODE=copy
 
 # Install the project's dependencies using the lockfile and settings
 COPY uv.lock pyproject.toml README.md /app/
-RUN --mount=type=cache,target=/root/.cache/uv     uv sync --frozen --no-install-project --no-dev --no-editable
+RUN     uv sync --frozen --no-install-project --no-dev --no-editable
 
 # Then, add the rest of the project source code and install it
 # Installing separately from its dependencies allows optimal layer caching
 ADD src /app/src
-RUN --mount=type=cache,target=/root/.cache/uv     uv sync --frozen --no-dev --no-editable
-RUN --mount=type=cache,target=/root/.cache/uv     uv pip install ddtrace~=3.0
+RUN     uv sync --frozen --no-dev --no-editable
+RUN     uv pip install ddtrace~=3.0
 
 FROM python:3.12-slim-bookworm
 
